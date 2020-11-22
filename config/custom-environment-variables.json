@@ -1,0 +1,4 @@
+{
+  "connectionString": "level-up-api:connection-string",
+  "jwtPrivateKey": "level-up-api:jwt-private-key"
+}
