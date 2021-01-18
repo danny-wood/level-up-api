@@ -5,16 +5,19 @@ const express = require("express");
 const router = express.Router();
 const { User, validate } = require("../models/user");
 
-router.get("/", auth, async (req, res) => {
-  const user = await User.find().select(["-password", "-__v"]);
-  res.send(user);
-});
-
+//:: /api/users/me
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   res.send(user);
 });
 
+//:: /api/users
+router.get("/", auth, async (req, res) => {
+  const user = await User.find().select(["-password", "-__v"]);
+  res.send(user);
+});
+
+//:: /api/users
 router.post("/", async (req, res) => {
   // Validate request
   const { error } = validate(req.body);
@@ -34,7 +37,7 @@ router.post("/", async (req, res) => {
   await user.save();
 
   // Return user with the JWT header, this is to auto login the user, don't return
-  // the JWT if you want the auth to confirm their email address
+  // the JWT if you want the user to confirm their email address
   //TODO: Add email verification to user sign up process
   const token = user.generateAuthToken();
   res
@@ -43,6 +46,6 @@ router.post("/", async (req, res) => {
 });
 
 //TODO: Add update endpoint
-//TODO: Add delete ednpoint
+//TODO: Add delete endpoint
 
 module.exports = router;
